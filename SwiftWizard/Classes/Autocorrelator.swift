@@ -1,4 +1,4 @@
-// The Autocorrelator (aka Serial Correlator) processes the audio signal using a delayed copy of itself
+// The Autocorrelator (aka Serial Correlator) provides static methods for LPC signal processing
 // Digital audio input can be represented as a discrete-time signal (finite energy), modeled as a square-summable function
 // The resulting coefficients describe the relationship between any two consecutive points
 
