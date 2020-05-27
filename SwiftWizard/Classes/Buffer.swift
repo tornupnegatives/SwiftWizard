@@ -1,50 +1,46 @@
-//
-//  Buffer.swift
-//  SwiftWizard
-//
-//  Created by Joseph Bellahcen on 5/26/20.
-//  Copyright © 2020 Joseph Bellahcen. All rights reserved.
-//
+// The Buffer object holds samples for processing
 
 import Foundation
 
 final class Buffer {
     var size:       UInt
     var sampleRate: UInt
-    
     var samples:    [Double]!
-    var start:      UInt?
-    var end:        UInt?
     
-    // initWithSize()
+    // Included in original but appear unused
+    // var start:      UInt
+    // var end:        UInt
+    
+    // Instantiate an empty buffer
     init(size: UInt, sampleRate: UInt) {
         self.size       = size
         self.sampleRate = sampleRate
     }
     
-    // initWithSamples
+    // Instantiate buffer and fill it with samples
     init(samples: [Double], size: UInt, sampleRate: UInt) {
         self.samples    = samples
         self.size       = size
         self.sampleRate = sampleRate
     }
     
-    // initWithSamples
+    // Included in original but appears unused
+    /*
     init(samples: [Double], size: UInt, sampleRate: UInt, start: UInt, end: UInt) {
         self.samples    = samples
         self.size       = size
         self.sampleRate = sampleRate
         self.start      = start
         self.end        = end
-    }
+    } */
     
     func energy() -> Double {
-        return Autocorrelator.sumOfSquaresFor(buffer: self)
+        return Autocorrelator.sumOfSquares(buffer: self)
     }
     
     func copy(with zone: NSZone? = nil) -> Buffer {
         if samples != nil {
-            return Buffer(samples: self.samples!, size: self.size, sampleRate: self.sampleRate)
+            return Buffer(samples: self.samples, size: self.size, sampleRate: self.sampleRate)
         }
         else {
             return Buffer(size: self.size, sampleRate: self.sampleRate)
