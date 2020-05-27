@@ -39,6 +39,7 @@ final class BitHelpers {
         return int
     }
     
+    // Originally byteToValue()
     static func byteToInt(byte: String) -> UInt {
         return UInt(byte) ?? 0  // TODO: TEST
     }
