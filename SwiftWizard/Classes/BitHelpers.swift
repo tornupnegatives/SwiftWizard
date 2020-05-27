@@ -41,7 +41,7 @@ final class BitHelpers {
     
     // Originally byteToValue()
     static func byteToInt(byte: String) -> UInt {
-        return UInt(byte) ?? 0  // TODO: TEST
+        return UInt(byte) ?? 0  // Unsure if nil case is possible. Must test later
     }
     
 }
