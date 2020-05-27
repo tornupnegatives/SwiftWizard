@@ -1,11 +1,5 @@
-//
-//  ClosestValueFinder.swift
-//  SwiftWizard
-//
-//  Created by Joseph Bellahcen on 5/26/20.
-//  Copyright © 2020 Joseph Bellahcen. All rights reserved.
-//
-
+// ClosestValueFinder queries the (Coding)Table and return the index of the element therein most closely related to actual
+    
 import Foundation
 
 final class ClosestValueFinder {
