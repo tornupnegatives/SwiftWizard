@@ -1,49 +1,45 @@
-//
-//  BitHelpers.swift
-//  SwiftWizard
-//
-//  Created by Joseph Bellahcen on 5/26/20.
-//  Copyright © 2020 Joseph Bellahcen. All rights reserved.
-//
+// BitHelpers provides some static methods for working with binary strings
 
 import Foundation
 
 final class BitHelpers {
-    static func valueToBinary(value: UInt, bits: UInt) -> String {
-        var value = value
+    // Originally valueToBinary()
+    static func intToBin(int: UInt, nBits: UInt) -> String {
+        var int = int
         var binary: String = ""
         
         repeat {
-            binary = String(format: "%lu", value & 1) + binary
-            value >>= 1
-        } while value > 0
+            binary = String(format: "%lu", int & 1) + binary
+            int >>= 1
+        } while int > 0
         
-        return leftZeroPadded(binary: binary, bits: bits)
+        return leftZeroPadded(binary: binary, nBits: nBits)
     }
     
-    private static func leftZeroPadded(binary: String, bits: UInt) -> String {
+    private static func leftZeroPadded(binary: String, nBits: UInt) -> String {
         var binary: String = binary
         
-        while binary.count < bits {
+        while binary.count < nBits {
             binary = "0\(binary)"
         }
         return binary
     }
     
-    static func valueForBinary(binary: String) -> UInt {
-        var value: UInt = 0
+    // Originally valueForBinary()
+    static func binToInt(binary: String) -> UInt {
+        var int: UInt = 0
         let cString: String = String(describing: binary.cString(using: String.Encoding.utf8)) // Thanks alessandro-ornano
         let length = cString.count
         
         for offset in length...0 {
             if cString[cString.index(cString.startIndex, offsetBy: offset)] == "1" {
-                value += (1 << abs(offset - length))
+                int += (1 << abs(offset - length))
             }
         }
-        return value
+        return int
     }
     
-    static func byteToValue(byte: String) -> UInt {
+    static func byteToInt(byte: String) -> UInt {
         return UInt(byte) ?? 0  // TODO: TEST
     }
     
