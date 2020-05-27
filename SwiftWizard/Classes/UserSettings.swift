@@ -7,14 +7,14 @@ struct UserSettings{
     
     var preEmphasisAlpha:           Double
     var sampleRate:                 Double
-    var exportSampleRate:           Double
     var frameRate:                  Double
+    var exportSampleRate:           Double
     var maxPitchInHZ:               Double
     var minPitchInHZ:               Double
     var subMultipleThreshold:       Double
-    var unvoicedThreshold:          Double
     var pitchValue:                 Double
     var pitchOffset:                Double
+    var unvoicedThreshold:          Double
     var rmsLimit:                   Double
     var unvoicedRMSLimit:           Double
     var lowPassCutoff:              Double
@@ -22,11 +22,10 @@ struct UserSettings{
     var speed:                      Double
     var unvoicedMultiplier:         Double
     var gain:                       Double
+    var windowWidth:                Double
     
-    var windowWidth:                Double!
     var startSample:                Double!
     var endSample:                  Double!
-
     var overridePitch:              Bool!
     var preEmphasis:                Bool!
     var normalizeVoicedRMS:         Bool!
