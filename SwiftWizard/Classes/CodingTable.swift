@@ -8,9 +8,23 @@ enum CodingTableError: Error {
 }
 
 struct CodingTable {
+    static let kParameterGain:   String = "gain"
+    static let kParameterRepeat: String = "repeat"
+    static let kParameterPitch:  String = "pitch"
+    static let kParameterK1:     String = "k1"
+    static let kParameterK2:     String = "k2"
+    static let kParameterK3:     String = "k3"
+    static let kParameterK4:     String = "k4"
+    static let kParameterK5:     String = "k5"
+    static let kParameterK6:     String = "k6"
+    static let kParameterK7:     String = "k7"
+    static let kParameterK8:     String = "k8"
+    static let kParameterK9:     String = "k9"
+    static let kParameterK10:    String = "k10"
+    static let kParameterKeys:   UInt   = 13
+    static let kStopFrameIndex:  UInt   = 15
+    
     static let parameters:          [String] = ["gain", "repeat", "pitch", "k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10"]
-    static let kParameterKeys:      UInt     = 13
-    static let kStopFrameIndex:     UInt     = 15
 
     private static let k1:          [Float]  = [-0.97850, -0.97270, -0.97070, -0.96680, -0.96290, -0.95900, -0.95310, -0.94140,
                                                 -0.93360, -0.92580, -0.91600, -0.90620, -0.89650, -0.88280, -0.86910, -0.85350,
