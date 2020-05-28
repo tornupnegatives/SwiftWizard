@@ -1,83 +1,78 @@
-//
-//  Reflector.swift
-//  SwiftWizard
-//
-//  Created by Joseph Bellahcen on 5/26/20.
-//  Copyright © 2020 Joseph Bellahcen. All rights reserved.
-//
+// The Reflector performs linear reflections on the RMS value associated with a set of K coefficients
 
 import Foundation
 
 final class Reflector {
-    private let kNumberofKParameters = 11
-    private var ks:       [Double]
-    private var rms:      Float!
-    var limitRMS:         Bool!
-    var isVoiced:         Bool
-    var isUnvoiced:       Bool
+    private let nKParameters:   Int         = 11
+    private var ks:             [Double]
+    private var rms:            Double!
     
-    init(){
-        ks = [Double]()
-        for _ in 0...kNumberofKParameters {
-            ks.append(0)
-        }
+    var isVoiced:               Bool
+    var isUnvoiced:             Bool
+    var unvoicedThreshold:      Float
+    var limitRMS:               Bool!
+    
+    
+    init() {
+        ks = Array(repeating: 0, count: 11)
         
-        isUnvoiced      = self.ks[1] >= UserSettings().unvoicedThreshold
-        isVoiced        = !isUnvoiced
+        self.unvoicedThreshold = Float(UserSettings.sharedInstance.unvoicedThreshold)
+        self.isUnvoiced        = ks[1] >= Double(unvoicedThreshold)
+        self.isVoiced          = !isUnvoiced
     }
     
-    init(ks: [Double], rms: Float, limitRMS: Bool){
+    init(ks: [Double], rms: Double, limitRMS: Bool) {
         self.rms        = rms
         self.limitRMS   = limitRMS
         self.ks         = ks
         
-        isUnvoiced      = self.ks[1] >= UserSettings().unvoicedThreshold
-        isVoiced        = !isUnvoiced
+        self.unvoicedThreshold = Float(UserSettings.sharedInstance.unvoicedThreshold)
+        self.isUnvoiced        = ks[1] >= Double(unvoicedThreshold)
+        self.isVoiced          = !isUnvoiced
     }
     
-    static func translateCoefficients(r: [Double], numberOfSamples: UInt) -> Reflector {
-        // Leroux Guegen algorithm for finding Ks
-        var k: [Double] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        var b: [Double] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        var d: [Double] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    // Applies Leroux Guegen algorithm to find K coefficients
+    static func translateCoefficients(r: [Double], nSamples: UInt) -> Reflector {
+        var k: [Double] = Array(repeating: 0, count: 11)
+        var b: [Double] = Array(repeating: 0, count: 11)
+        var d: [Double] = Array(repeating: 0, count: 12)
         
-        k[1] = -r[1] / r[0]
-        d[1] =  r[1]
-        d[2] =  r[0] + (k[1] * r[1])
+        k[1] = -r[1] / r[0];
+        d[1] = r[1];
+        d[2] = r[0] + (k[1] * r[1]);
         
         for i in 2...10 {
             var y: Double = r[i]
             b[1] = y
             
-            for j in 1...(i-1) {
-                b[j + 1] = d[j] + (k[j] * y)
-                y += (k[j] * d[j])
-                d[j] = b[j]
+            for j in 1...(i - 1) {
+                b[j + 1] = d[j] + (k[j] * y);
+                y = y + (k[j] * d[j]);
+                d[j] = b[j];
             }
             
             k[i] = -y / d[i];
             d[i + 1] = d[i] + (k[i] * y);
             d[i] = b[i];
         }
-        
-        let rms: Float = formattedRMS(rms: Float(d[11]), numberOfSamples: numberOfSamples)
-        return Reflector(ks: k, rms: rms, limitRMS: true)
+        let rms: Float = formattedRMS(rms: Float(d[11]), nSamples: nSamples)
+        return Reflector(ks: k, rms: Double(rms), limitRMS: true)
     }
     
-    private static func formattedRMS(rms: Float, numberOfSamples: UInt) -> Float {
-        return sqrt(rms / Float(numberOfSamples)) * Float(1 << 15)
+    private static func formattedRMS(rms: Float, nSamples: UInt) -> Float {
+        return sqrt(rms / Float(nSamples)) * Float(1 << 15)
     }
     
-    func setRMS(rms: Float) {
-        self.rms = rms
-    }
-    
-    func getRMS() -> Float {
-        if limitRMS == true && rms >= CodingTable.rms[Int(CodingTable.kStopFrameIndex) - 1] {
-            return CodingTable.rms[Int(CodingTable.kStopFrameIndex) - 1]
-            
+    func getRMS() -> Double {
+        // Valid RMS values must not exceed 7789.0. This provides a fallback
+        if self.limitRMS == true && self.rms >= Double(CodingTable.rms[Int(CodingTable.kStopFrameIndex) - 1]) {
+            return Double(CodingTable.rms[Int(CodingTable.kStopFrameIndex) - 1])
         } else {
-            return rms
+            return self.rms
         }
+    }
+    
+    func setRMS(rms: Double) {
+        self.rms = rms
     }
 }
