@@ -18,10 +18,10 @@ class ReflectorTests: XCTestCase {
     override func tearDownWithError() throws {}
 
     func testDoesNotAllowStopFrameGeneration() throws {
-        subject.setRMS(rms: CodingTable.rms[15])
-        XCTAssertEqual(subject.getRMS(), CodingTable.rms[15])
+        subject.setRMS(rms: Double(CodingTable.rms[15]))
+        XCTAssertEqual(subject.getRMS(), Double(CodingTable.rms[15]))
         subject.limitRMS = true
-        XCTAssertEqual(subject.getRMS(), CodingTable.rms[14])
+        XCTAssertEqual(subject.getRMS(), Double(CodingTable.rms[14]))
         
     }
 }
