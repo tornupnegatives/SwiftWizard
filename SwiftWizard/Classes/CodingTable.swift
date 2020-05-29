@@ -15,8 +15,8 @@ let kParameterK7:     String = "k7"
 let kParameterK8:     String = "k8"
 let kParameterK9:     String = "k9"
 let kParameterK10:    String = "k10"
-let kParameterKeys:   UInt   = 13
-let kStopFrameIndex:  UInt   = 15
+let kParameterKeys:   Int   = 13
+let kStopFrameIndex:  Int   = 15
 
 // Tried to access non-existent K-Parameter
 enum CodingTableError: Error {
