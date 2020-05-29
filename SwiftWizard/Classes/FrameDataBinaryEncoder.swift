@@ -13,7 +13,6 @@ class FrameDataBinaryEncoder {
                 guard let value: UInt = parameterPair[CTParameter] else {continue}
                 
                 let binaryValue: String = BitHelpers.valueToBinary(int: value, nBits: UInt(CodingTable.bits[index]))
-                print(CodingTable.bits)
                 binary += binaryValue
             }
         }
