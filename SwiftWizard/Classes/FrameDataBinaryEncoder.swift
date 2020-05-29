@@ -2,7 +2,7 @@
 
 import Foundation
 
-class FrameDataBinaryEncoder {
+final class FrameDataBinaryEncoder {
     private static var binary: String = ""
     
     // Iterate through array of parameter dictionaries to get binary value for each element
