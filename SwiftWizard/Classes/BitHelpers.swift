@@ -3,45 +3,26 @@
 import Foundation
 
 final class BitHelpers {
-    // Originally valueToBinary()
-    static func intToBin(int: UInt, nBits: UInt) -> String {
-        var int = int
-        var binary: String = ""
-        
-        repeat {
-            binary = String(format: "%lu", int & 1) + binary
-            int >>= 1
-        } while int > 0
-        
-        return leftZeroPadded(binary: binary, nBits: nBits)
+    static func valueToBinary(int: UInt, nBits: UInt) -> String {
+        let binary: String = String(int, radix: 2)
+        return leftZeroPad(binary: binary, nBits: nBits)
     }
     
-    private static func leftZeroPadded(binary: String, nBits: UInt) -> String {
-        var binary: String = binary
+    private static func leftZeroPad(binary: String, nBits: UInt) -> String {
+        var padded: String = binary
         
-        while binary.count < nBits {
-            binary = "0\(binary)"
+        while padded.count < nBits {
+            padded = "0" + padded
         }
-        return binary
+        return padded
     }
     
-    // Originally valueForBinary()
-    static func binToInt(binary: String) -> UInt {
-        var int: UInt = 0
-        let cString: String = String(describing: binary.cString(using: String.Encoding.utf8)) // Thanks alessandro-ornano
-        let length = cString.count
-        
-        for offset in length...0 {
-            if cString[cString.index(cString.startIndex, offsetBy: offset)] == "1" {
-                int += (1 << abs(offset - length))
-            }
-        }
-        return int
+    static func binaryToValue(binary: String) -> UInt {
+        return UInt(binary, radix: 2) ?? 0
     }
     
-    // Originally byteToValue()
-    static func byteToInt(byte: String) -> UInt {
-        return UInt(byte) ?? 0  // Unsure if nil case is possible. Must test later
+    static func byteToValue(byte: String) -> UInt {
+        return UInt(byte) ?? 0
     }
     
 }
