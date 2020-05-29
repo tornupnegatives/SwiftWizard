@@ -5,11 +5,11 @@ import Foundation
 final class Reflector {
     private let nKParameters:   Int         = 11
     private var ks:             [Double]
-    private var rms:            Double!
     
     var isVoiced:               Bool
     var isUnvoiced:             Bool
     var unvoicedThreshold:      Float
+    var rms:                    Double!
     var limitRMS:               Bool!
     
     
