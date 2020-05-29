@@ -2,28 +2,28 @@
 
 import Foundation
 
+let kParameterGain:   String = "gain"
+let kParameterRepeat: String = "repeat"
+let kParameterPitch:  String = "pitch"
+let kParameterK1:     String = "k1"
+let kParameterK2:     String = "k2"
+let kParameterK3:     String = "k3"
+let kParameterK4:     String = "k4"
+let kParameterK5:     String = "k5"
+let kParameterK6:     String = "k6"
+let kParameterK7:     String = "k7"
+let kParameterK8:     String = "k8"
+let kParameterK9:     String = "k9"
+let kParameterK10:    String = "k10"
+let kParameterKeys:   UInt   = 13
+let kStopFrameIndex:  UInt   = 15
+
 // Tried to access non-existent K-Parameter
 enum CodingTableError: Error {
     case illegalKBin
 }
 
 struct CodingTable {
-    static let kParameterGain:   String = "gain"
-    static let kParameterRepeat: String = "repeat"
-    static let kParameterPitch:  String = "pitch"
-    static let kParameterK1:     String = "k1"
-    static let kParameterK2:     String = "k2"
-    static let kParameterK3:     String = "k3"
-    static let kParameterK4:     String = "k4"
-    static let kParameterK5:     String = "k5"
-    static let kParameterK6:     String = "k6"
-    static let kParameterK7:     String = "k7"
-    static let kParameterK8:     String = "k8"
-    static let kParameterK9:     String = "k9"
-    static let kParameterK10:    String = "k10"
-    static let kParameterKeys:   UInt   = 13
-    static let kStopFrameIndex:  UInt   = 15
-    
     static let parameters:          [String] = ["gain", "repeat", "pitch", "k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10"]
 
     private static let k1:          [Float]  = [-0.97850, -0.97270, -0.97070, -0.96680, -0.96290, -0.95900, -0.95310, -0.94140,
