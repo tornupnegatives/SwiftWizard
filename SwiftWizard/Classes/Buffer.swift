@@ -38,7 +38,7 @@ final class Buffer {
         return Autocorrelator.sumOfSquares(buffer: self)
     }
     
-    func copy(with zone: NSZone? = nil) -> Buffer {
+    func copy() -> Buffer {
         if samples != nil {
             return Buffer(samples: self.samples, size: self.size, sampleRate: self.sampleRate)
         }
