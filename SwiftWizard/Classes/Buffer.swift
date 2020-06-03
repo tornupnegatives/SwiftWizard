@@ -3,8 +3,8 @@
 import Foundation
 
 final class Buffer {
-    var size:       UInt
-    var sampleRate: UInt
+    var size:       Int
+    var sampleRate: Int
     var samples:    [Double]!
     
     // Included in original but appear unused
@@ -12,13 +12,13 @@ final class Buffer {
     // var end:        UInt
     
     // Instantiate an empty buffer
-    init(size: UInt, sampleRate: UInt) {
+    init(size: Int, sampleRate: Int) {
         self.size       = size
         self.sampleRate = sampleRate
     }
     
     // Instantiate buffer and fill it with samples
-    init(samples: [Double], size: UInt, sampleRate: UInt) {
+    init(samples: [Double], size: Int, sampleRate: Int) {
         self.samples    = samples
         self.size       = size
         self.sampleRate = sampleRate

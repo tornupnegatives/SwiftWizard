@@ -3,12 +3,12 @@
 import Foundation
 
 final class BitHelpers {
-    static func valueToBinary(int: UInt, nBits: UInt) -> String {
-        let binary: String = String(int, radix: 2)
+    static func valueToBinary(value: Int, nBits: Int) -> String {
+        let binary: String = String(value, radix: 2)
         return leftZeroPad(binary: binary, nBits: nBits)
     }
     
-    private static func leftZeroPad(binary: String, nBits: UInt) -> String {
+    private static func leftZeroPad(binary: String, nBits: Int) -> String {
         var padded: String = binary
         
         while padded.count < nBits {
@@ -17,12 +17,12 @@ final class BitHelpers {
         return padded
     }
     
-    static func binaryToValue(binary: String) -> UInt {
-        return UInt(binary, radix: 2) ?? 0
+    static func binaryToValue(binary: String) -> Int {
+        return Int(binary, radix: 2) ?? 0
     }
     
-    static func byteToValue(byte: String) -> UInt {
-        return UInt(byte) ?? 0
+    static func byteToValue(byte: String) -> Int {
+        return Int(byte) ?? 0
     }
     
 }

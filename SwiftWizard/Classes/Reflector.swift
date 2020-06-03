@@ -4,20 +4,20 @@ import Foundation
 
 final class Reflector {
     private let nKParameters:   Int         = 11
-    private var ks:             [Double]
+    private var rms:            Double!
     
+    var ks:                     [Double]
     var isVoiced:               Bool
     var isUnvoiced:             Bool
-    var unvoicedThreshold:      Float
-    var rms:                    Double!
+    var unvoicedThreshold:      Double
     var limitRMS:               Bool!
     
     
     init() {
         ks = Array(repeating: 0, count: 11)
         
-        self.unvoicedThreshold = Float(UserSettings.sharedInstance.unvoicedThreshold)
-        self.isUnvoiced        = ks[1] >= Double(unvoicedThreshold)
+        self.unvoicedThreshold = UserSettings.sharedInstance.unvoicedThreshold
+        self.isUnvoiced        = ks[1] >= unvoicedThreshold
         self.isVoiced          = !isUnvoiced
     }
     
@@ -26,13 +26,13 @@ final class Reflector {
         self.limitRMS   = limitRMS
         self.ks         = ks
         
-        self.unvoicedThreshold = Float(UserSettings.sharedInstance.unvoicedThreshold)
-        self.isUnvoiced        = ks[1] >= Double(unvoicedThreshold)
+        self.unvoicedThreshold = UserSettings.sharedInstance.unvoicedThreshold
+        self.isUnvoiced        = ks[1] >= unvoicedThreshold
         self.isVoiced          = !isUnvoiced
     }
     
     // Applies Leroux Guegen algorithm to find K coefficients
-    static func translateCoefficients(r: [Double], nSamples: UInt) -> Reflector {
+    static func translateCoefficients(r: [Double], nSamples: Int) -> Reflector {
         var k: [Double] = Array(repeating: 0, count: 11)
         var b: [Double] = Array(repeating: 0, count: 11)
         var d: [Double] = Array(repeating: 0, count: 12)
@@ -55,18 +55,18 @@ final class Reflector {
             d[i + 1] = d[i] + (k[i] * y);
             d[i] = b[i];
         }
-        let rms: Float = formattedRMS(rms: Float(d[11]), nSamples: nSamples)
-        return Reflector(ks: k, rms: Double(rms), limitRMS: true)
+        let rms: Double = formattedRMS(rms: d[11], nSamples: nSamples)
+        return Reflector(ks: k, rms: rms, limitRMS: true)
     }
     
-    private static func formattedRMS(rms: Float, nSamples: UInt) -> Float {
-        return sqrt(rms / Float(nSamples)) * Float(1 << 15)
+    private static func formattedRMS(rms: Double, nSamples: Int) -> Double {
+        return sqrt(rms / Double(nSamples)) * Double(1 << 15)
     }
     
     func getRMS() -> Double {
         // Valid RMS values must not exceed 7789.0. This provides a fallback
-        if self.limitRMS == true && self.rms >= Double(CodingTable.rms[Int(kStopFrameIndex) - 1]) {
-            return Double(CodingTable.rms[Int(kStopFrameIndex) - 1])
+        if self.limitRMS == true && self.rms >= CodingTable.rms[kStopFrameIndex - 1] {
+            return CodingTable.rms[kStopFrameIndex - 1]
         } else {
             return self.rms
         }

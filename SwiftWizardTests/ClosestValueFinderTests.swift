@@ -9,15 +9,15 @@
 import XCTest
 
 class ClosestValueFinderTests: XCTestCase {
-    var subj:    UInt!
+    var subj:    Int!
 
     override func setUpWithError() throws {}
 
     override func tearDownWithError() throws {}
 
     func testFindsClosestIndexGivenActualAndList() throws {
-        let size:   UInt      = 2
-        var floats: [Float] = [1.0, 2.0]
+        let size:   Int      = 2
+        var floats: [Double] = [1.0, 2.0]
         
         subj = ClosestValueFinder.indexFor(actual: 1.25, table: floats, size: size)
         XCTAssertEqual(subj, 0)

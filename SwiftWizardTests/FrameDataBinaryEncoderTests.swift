@@ -10,11 +10,11 @@ import XCTest
 @testable import SwiftWizard
 
 class FrameDataBinaryEncoderTests: XCTestCase {
-    var frameData: [[String: UInt]]!
+    var frameData: [[String: Int]]!
     var subject:   [String]!
 
     override func setUpWithError() throws {
-        frameData = [[String: UInt]]()
+        frameData = [[String: Int]]()
         frameData.append(contentsOf: [[kParameterGain: 9],  [kParameterRepeat: 0],
                                       [kParameterPitch: 0], [kParameterK1: 21],
                                       [kParameterK2: 22],   [kParameterK3: 6],

@@ -3,16 +3,15 @@
 import Foundation
 
 final class ClosestValueFinder {
-    static func indexFor(actual: Double, table: [Float], size: UInt) -> UInt {
-        let actual = Float(actual)
+    static func indexFor(actual: Double, table: [Double], size: Int) -> Int {
         if actual < table[0] {
             return 0
         }
         
         for i in 1..<size {
-            if table[Int(i)] > actual {
-                let previous: Float = table[Int(i) - 1]
-                if (table[Int(i)] - actual) < (actual - previous) {
+            if table[i] > actual {
+                let previous: Double = table[i - 1]
+                if (table[i] - actual) < (actual - previous) {
                     return i
                 } else {
                     return i - 1
