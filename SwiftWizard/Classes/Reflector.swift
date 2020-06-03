@@ -65,7 +65,7 @@ final class Reflector {
     
     func getRMS() -> Double {
         // Valid RMS values must not exceed 7789.0. This provides a fallback
-        if self.limitRMS == true && self.rms >= CodingTable.rms[kStopFrameIndex - 1] {
+        if self.limitRMS && self.rms >= CodingTable.rms[kStopFrameIndex - 1] {
             return CodingTable.rms[kStopFrameIndex - 1]
         } else {
             return self.rms
