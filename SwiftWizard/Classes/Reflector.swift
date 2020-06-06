@@ -3,15 +3,14 @@
 import Foundation
 
 final class Reflector {
-    var ks:                     [Double]
     var isVoiced:               Bool
     var isUnvoiced:             Bool
     var unvoicedThreshold:      Double
-    var limitRMS:               Bool!
+    var rms:                    Double?
+    var limitRMS:               Bool    = false
     
-    private let nKParameters:   Int         = 11
-    private var rms:            Double!
-    
+    private var ks:             [Double]
+    private let nKParameters:   Int = 11
     
     init() {
         ks = Array(repeating: 0, count: 11)
@@ -65,14 +64,29 @@ final class Reflector {
     
     func getRMS() -> Double {
         // Valid RMS values must not exceed 7789.0. This provides a fallback
-        if self.limitRMS && self.rms >= CodingTable.rms[kStopFrameIndex - 1] {
+        if self.limitRMS && self.rms! >= CodingTable.rms[kStopFrameIndex - 1] {
             return CodingTable.rms[kStopFrameIndex - 1]
         } else {
-            return self.rms
+            return self.rms!
         }
     }
     
     func setRMS(rms: Double) {
         self.rms = rms
+    }
+    
+    func getKs() -> [Double] {
+        return ks
+    }
+    
+    func getKAt(index: Int) throws -> Double {
+        if index < 0 && index >= ks.count {
+            throw CodingTableError.illegalKBin("Illegal kBin get at [\(index)]")
+        }
+        return ks[index]
+    }
+
+    func setK(index: Int, value: Double) {
+        ks[index] = value
     }
 }
