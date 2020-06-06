@@ -1,4 +1,4 @@
-// The CodingTable is a static class that stores coefficients needed to encode/decode LPC bistreams
+// The CodingTable is a static class that stores coefficient constants needed to encode/decode LPC bistreams
 
 import Foundation
 
@@ -20,11 +20,25 @@ let kStopFrameIndex:  Int   = 15
 
 // Tried to access non-existent K-Parameter
 enum CodingTableError: Error {
-    case illegalKBin
+    case illegalKBin(String)
 }
 
 struct CodingTable {
-    static let parameters:          [String] =  ["gain", "repeat", "pitch", "k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8", "k9", "k10"]
+    static let bits:                [Int]  =    [4, 1, 6, 5, 5, 4, 4, 4, 4, 4, 3, 3, 3]
+    
+    static let parameters:          [String] =  ["gain", "repeat", "pitch", "k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8",
+                                                 "k9", "k10"]
+    
+    static let rms:                 [Double]  = [0.0, 52.0, 87.0, 123.0, 174.0, 246.0, 348.0, 491.0, 694.0, 981.0, 1385.0,
+                                                 1957.0, 2764.0, 3904.0, 5514.0, 7789.0]
+    
+    
+    static let pitch:               [Double]  = [0.0, 1.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0,
+                                                 27.0, 28.0, 29.0, 30.0, 31.0, 32.0, 33.0, 34.0, 35.0, 36.0, 36.0, 38.0, 39.0,
+                                                 40.0, 41.0, 42.0, 44.0, 46.0, 48.0, 50.0, 52.0, 53.0, 56.0, 58.0, 60.0, 62.0,
+                                                 65.0, 67.0, 70.0, 72.0, 75.0, 78.0, 80.0, 83.0, 86.0, 89.0, 93.0, 97.0, 100.0,
+                                                 104.0, 108.0, 113.0, 117.0, 121.0, 126.0, 131.0, 135.0, 140.0, 146.0, 151.0,
+                                                 157]
 
     private static let k1:          [Double]  = [-0.97850, -0.97270, -0.97070, -0.96680, -0.96290, -0.95900, -0.95310, -0.94140,
                                                  -0.93360, -0.92580, -0.91600, -0.90620, -0.89650, -0.88280, -0.86910, -0.85350,
@@ -56,22 +70,10 @@ struct CodingTable {
     private static let k9:          [Double]  = [-0.50000, -0.34286, -0.18571, -0.02857, 0.12857, 0.28571, 0.44286, 0.60000]
 
     private static let k10:         [Double]  = [-0.40000, -0.25714, -0.11429, 0.02857,  0.17143, 0.31429, 0.45714, 0.60000]
-    
-    static let pitch:               [Double]  = [0.0, 1.0, 16.0, 17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0,
-                                                 27.0, 28.0, 29.0, 30.0, 31.0, 32.0, 33.0, 34.0, 35.0, 36.0, 36.0, 38.0, 39.0,
-                                                 40.0, 41.0, 42.0, 44.0, 46.0, 48.0, 50.0, 52.0, 53.0, 56.0, 58.0, 60.0, 62.0,
-                                                 65.0, 67.0, 70.0, 72.0, 75.0, 78.0, 80.0, 83.0, 86.0, 89.0, 93.0, 97.0, 100.0,
-                                                 104.0, 108.0, 113.0, 117.0, 121.0, 126.0, 131.0, 135.0, 140.0, 146.0, 151.0, 157]
 
-    static let rms:                 [Double]  = [0.0, 52.0, 87.0, 123.0, 174.0, 246.0, 348.0, 491.0, 694.0, 981.0, 1385.0,
-                                                 1957.0, 2764.0, 3904.0, 5514.0, 7789.0]
-
-    static let bits:                [Int]  =    [4, 1, 6, 5, 5, 4, 4, 4, 4, 4, 3, 3, 3]
-
-    
     static func kSizeFor(k: Int) throws -> Int {
         if k > 10 {
-            throw CodingTableError.illegalKBin
+            throw CodingTableError.illegalKBin("Illegal kSize at [\(k)]")
         }
 
         return 1 << bits[k + 2]
@@ -109,8 +111,7 @@ struct CodingTable {
         case 10:
             return k10
         default:
-            throw CodingTableError.illegalKBin
-            
+            throw CodingTableError.illegalKBin("Illegal kBin at [\(k)]")
         }
     }
 }
