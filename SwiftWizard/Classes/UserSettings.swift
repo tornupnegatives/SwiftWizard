@@ -26,14 +26,15 @@ struct UserSettings{
     
     var startSample:                Double!
     var endSample:                  Double!
-    var overridePitch:              Bool!
-    var preEmphasis:                Bool!
-    var normalizeVoicedRMS:         Bool!
-    var normalizeUnvoicedRMS:       Bool!
-    var excitationFilterOnly:       Bool!
-    var skipLeadingSilence:         Bool!
-    var includeHexPrefix:           Bool!
-    var includeExplicitStopFrame:   Bool!
+    
+    var overridePitch:              Bool    = false
+    var preEmphasis:                Bool    = false
+    var normalizeVoicedRMS:         Bool    = false
+    var normalizeUnvoicedRMS:       Bool    = false
+    var excitationFilterOnly:       Bool    = false
+    var skipLeadingSilence:         Bool    = false
+    var includeHexPrefix:           Bool    = false
+    var includeExplicitStopFrame:   Bool    = false
 
     private init(){
         self.preEmphasisAlpha       = -0.93750
