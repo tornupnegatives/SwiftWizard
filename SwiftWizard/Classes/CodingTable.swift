@@ -71,11 +71,7 @@ struct CodingTable {
 
     private static let k10:         [Double]  = [-0.40000, -0.25714, -0.11429, 0.02857,  0.17143, 0.31429, 0.45714, 0.60000]
 
-    static func kSizeFor(k: Int) throws -> Int {
-        if k > 10 {
-            throw CodingTableError.illegalKBin("Illegal kSize at [\(k)]")
-        }
-
+    static func kSizeFor(k: Int) -> Int {
         return 1 << bits[k + 2]
     }
     
