@@ -6,10 +6,10 @@ final class Reflector {
     var isVoiced:               Bool
     var isUnvoiced:             Bool
     var unvoicedThreshold:      Double
+    var ks:                     [Double]
     var rms:                    Double?
     var limitRMS:               Bool    = false
     
-    private var ks:             [Double]
     private let nKParameters:   Int = 11
     
     init() {
@@ -23,7 +23,14 @@ final class Reflector {
     init(ks: [Double], rms: Double, limitRMS: Bool) {
         self.rms        = rms
         self.limitRMS   = limitRMS
+        
+        // Original port memcpys nKParameters elements from ks into self.ks
+        // As such, other parts of this program expect that ks always holds nKParameters values
+        // These values may have been random due to the nature of memecpy
         self.ks         = ks
+        for _ in (ks.count - 1)..<nKParameters {
+            self.ks.append(Double(Int.random(in: 1...200)))
+        }
         
         self.unvoicedThreshold = UserSettings.sharedInstance.unvoicedThreshold
         self.isUnvoiced        = ks[1] >= unvoicedThreshold
@@ -73,20 +80,5 @@ final class Reflector {
     
     func setRMS(rms: Double) {
         self.rms = rms
-    }
-    
-    func getKs() -> [Double] {
-        return ks
-    }
-    
-    func getKAt(index: Int) throws -> Double {
-        if index < 0 && index >= ks.count {
-            throw CodingTableError.illegalKBin("Illegal kBin get at [\(index)]")
-        }
-        return ks[index]
-    }
-
-    func setK(index: Int, value: Double) {
-        ks[index] = value
     }
 }
