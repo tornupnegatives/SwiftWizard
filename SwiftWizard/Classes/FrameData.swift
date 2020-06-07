@@ -3,15 +3,15 @@
 import Foundation
 
 final class FrameData {
-    var shouldSkip:                   Bool = false
-    var reflector:                    Reflector
-    var parameters:                   [String: Double]?
-    var translatedParameters:         [String: Double]?
+    var shouldSkip:                           Bool = false
+    var reflector:                            Reflector
     
-    private var pitch:                Double
-    private var repeats:              Bool
-    private var isDecodeFrame:        Bool = false
-    private var isStopFrame:          Bool = false
+    private var pitch:                        Double
+    private var repeats:                      Bool
+    private var isDecodeFrame:                Bool = true
+    private var isStopFrame:                  Bool = false
+    private var parameters:                   [String: Double]?
+    private var translatedParameters:         [String: Double]?
     
     
     
@@ -39,38 +39,37 @@ final class FrameData {
         self.repeats   = repeats
     }
     
-    func getParameters() throws -> [String: Double]? {
+    func getParameters() -> [String: Double] {
         if parameters != nil {
-            return parameters
-        } else if let parametersWithTranslate = try parametersWithTranslate(translate: false) {
-            return parametersWithTranslate
+            return parameters!
+        } else {
+            return parametersWithTranslate(translate: false)
         }
-        return nil
     }
     
-    private func getTranslatedParameters() throws -> [String: Double]? {
+    private func getTranslatedParameters() -> [String: Double]? {
         if translatedParameters != nil {
             return translatedParameters
-        } else if let parametersWithTranslate = try parametersWithTranslate(translate: false) {
-            return parametersWithTranslate
+        } else {
+            return parametersWithTranslate(translate: false)
         }
-        return nil
     }
     
-    private func parametersWithTranslate(translate: Bool) throws -> [String: Double]? {
+    private func parametersWithTranslate(translate: Bool) -> [String: Double] {
         var parameters: [String: Double] = [String: Double]()
         
-        parameters[kParameterGain] = parameterizedValueForRMS(rms: reflector.rms, translate: translate)
+        parameters[kParameterGain] = parameterizedValueForRMS(rms: reflector.rms!, translate: translate)
         if Double(parameters[kParameterGain]!) > 0.0 {
             parameters[kParameterRepeat] = parameterizedValueForRepeat(repeats: repeats)
             parameters[kParameterPitch]  = parameterizedValueForPitch(pitch: pitch, translate: translate)
             
-            if parameters[kParameterRepeat] != nil {
-                if var ks: [String: Double] = try kParametersFrom(from: 1, to: 4, translate: translate) {
+            if parameters[kParameterRepeat] == 0 {
+                if let ks: [String: Double] = kParametersFrom(from: 1, to: 4, translate: translate) {
                     parameters.merge(ks, uniquingKeysWith: { $1})
+                }
                     
-                    if parameters[kParameterPitch] != nil && (isDecodeFrame || reflector.isVoiced) {
-                        ks = try kParametersFrom(from: 5, to: 10, translate: translate)! // Already checked for existence
+                if parameters[kParameterPitch] != 0 && (isDecodeFrame || reflector.isVoiced) {
+                    if let ks =  kParametersFrom(from: 5, to: 10, translate: translate) {
                         parameters.merge(ks, uniquingKeysWith: { $1})
                     }
                 }
@@ -117,13 +116,13 @@ final class FrameData {
         }
     }
     
-    private func parameterizedValueForK(k: Double, bin: Int, translate: Bool) throws -> Double {
+    private func parameterizedValueForK(k: Double, bin: Int, translate: Bool) -> Double {
         let index: Int = ClosestValueFinder.indexFor(actual: k,
-                                                     table: try CodingTable.kBinFor(k: bin),
-                                                     size: try  CodingTable.kSizeFor(k: bin))
+                                                     table: try! CodingTable.kBinFor(k: bin),
+                                                     size:       CodingTable.kSizeFor(k: bin))
         
         if translate {
-            return try CodingTable.kBinFor(k: bin)[index]
+            return try! CodingTable.kBinFor(k: bin)[index]
         } else {
             return Double(index)
         }
@@ -168,20 +167,25 @@ final class FrameData {
         return repeats ? 1 : 0
     }
     
-    private func kParametersFrom(from: Int, to: Int, translate: Bool) throws -> [String: Double]? {
+    private func kParametersFrom(from: Int, to: Int, translate: Bool) -> [String: Double]? {
         if isStopFrame {
             return nil
         }
-        
+
         var parameters: [String: Double] = [String: Double]()
-        for k in from...to {
-            let key: String = parameterKeyForK(k: k)
-            parameters[key] = try parameterizedValueForK(k: reflector.ks[k], bin: k, translate: translate)
+        
+        var index: Int = from
+        while index <= to {
+            let key:       String = parameterKeyForK(index: index)
+            let parameter: Double = parameterizedValueForK(k: reflector.ks[index], bin: index, translate: translate)
+            parameters[key]       = parameter
+
+            index += 1
         }
         return parameters
     }
     
-    private func parameterKeyForK(k: Int) -> String {
-        return "k\(k)"
+    private func parameterKeyForK(index: Int) -> String {
+        return "k\(index)"
     }
 }
