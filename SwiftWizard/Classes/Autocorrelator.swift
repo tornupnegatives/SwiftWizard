@@ -1,6 +1,5 @@
 // The Autocorrelator (aka Serial Correlator) provides static methods for LPC signal processing
-// Digital audio input can be represented as a discrete-time signal (finite energy), modeled as a square-summable function
-// The resulting coefficients describe the relationship between any two consecutive points
+// It will generate linear coefficients to describe a discrete-time signal
 
 import Foundation
 
