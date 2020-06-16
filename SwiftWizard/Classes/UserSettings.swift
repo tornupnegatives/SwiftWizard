@@ -5,6 +5,9 @@ import Foundation
 struct UserSettings{
     static var sharedInstance:      UserSettings = UserSettings()
     
+    var startSample:                Double!
+    var endSample:                  Double!
+    
     var preEmphasisAlpha:           Double
     var sampleRate:                 Double
     var frameRate:                  Double
@@ -23,9 +26,6 @@ struct UserSettings{
     var unvoicedMultiplier:         Double
     var gain:                       Double
     var windowWidth:                Double
-    
-    var startSample:                Double!
-    var endSample:                  Double!
     
     var overridePitch:              Bool    = false
     var preEmphasis:                Bool    = false
