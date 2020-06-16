@@ -18,6 +18,7 @@ let kParameterK10:    String = "k10"
 let kParameterKeys:   Int   = 13
 let kStopFrameIndex:  Int   = 15
 
+// MARK: CodingTableError
 // Tried to access non-existent K-Parameter
 enum CodingTableError: Error {
     case illegalKBin(String)
