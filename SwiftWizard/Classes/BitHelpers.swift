@@ -2,6 +2,7 @@
 
 import Foundation
 
+// MARK: BitHelpersError
 enum BitHelpersError: Error {
     case illegalByte(String)
 }
