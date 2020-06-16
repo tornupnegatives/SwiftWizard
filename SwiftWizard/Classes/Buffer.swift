@@ -3,9 +3,9 @@
 import Foundation
 
 final class Buffer {
+    var samples:    [Double]?
     var size:       Int
     var sampleRate: Int
-    var samples:    [Double]!
 
     init(size: Int, sampleRate: Int) {
         self.size       = size
@@ -13,9 +13,9 @@ final class Buffer {
     }
     
     init(samples: [Double], size: Int, sampleRate: Int) {
+        self.sampleRate = sampleRate
         self.samples    = samples
         self.size       = size
-        self.sampleRate = sampleRate
     }
 
     func energy() -> Double {
@@ -24,7 +24,7 @@ final class Buffer {
     
     func copy() -> Buffer {
         if samples != nil {
-            return Buffer(samples: self.samples, size: self.size, sampleRate: self.sampleRate)
+            return Buffer(samples: self.samples!, size: self.size, sampleRate: self.sampleRate)
         }
         else {
             return Buffer(size: self.size, sampleRate: self.sampleRate)
