@@ -24,12 +24,11 @@ final class Reflector {
         self.rms        = rms
         self.limitRMS   = limitRMS
         
-        // Original port memcpys nKParameters elements from ks into self.ks
-        // As such, other parts of this program expect that ks always holds nKParameters values
-        // These values may have been random due to the nature of memecpy
         self.ks         = ks
+        
+        // Later functions assume ks has 11 values
         for _ in (ks.count - 1)..<nKParameters {
-            self.ks.append(Double(Int.random(in: 1...200)))
+            self.ks.append(0)
         }
         
         self.unvoicedThreshold = UserSettings.sharedInstance.unvoicedThreshold
