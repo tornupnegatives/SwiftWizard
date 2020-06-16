@@ -7,13 +7,11 @@ final class Buffer {
     var sampleRate: Int
     var samples:    [Double]!
 
-    // Instantiate an empty buffer
     init(size: Int, sampleRate: Int) {
         self.size       = size
         self.sampleRate = sampleRate
     }
     
-    // Instantiate buffer and fill it with samples
     init(samples: [Double], size: Int, sampleRate: Int) {
         self.samples    = samples
         self.size       = size
