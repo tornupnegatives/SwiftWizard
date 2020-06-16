@@ -1,4 +1,4 @@
-// ClosestValueFinder queries the (Coding)Table and return the index of the element therein most closely related to actual
+// ClosestValueFinder queries the (Coding)Table and return the index of the most closely-related coefficient
     
 import Foundation
 
