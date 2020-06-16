@@ -1,4 +1,4 @@
-// The FrameData class takes creates a dictionary with pairs of KParameters and their values
+// The FrameData class creates a dictionary with pairs of KParameters and their values
 // The number of parameters in a frame will depend on what sound that frame describes
 
 import Foundation
