@@ -3,7 +3,7 @@
 import Foundation
 
 final class Buffer {
-    var samples:    [Double]?
+    var samples:    [Double]!
     var size:       Int
     var sampleRate: Int
 
@@ -24,7 +24,7 @@ final class Buffer {
     
     func copy() -> Buffer {
         if samples != nil {
-            return Buffer(samples: self.samples!, size: self.size, sampleRate: self.sampleRate)
+            return Buffer(samples: self.samples, size: self.size, sampleRate: self.sampleRate)
         }
         else {
             return Buffer(size: self.size, sampleRate: self.sampleRate)
