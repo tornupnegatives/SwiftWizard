@@ -26,7 +26,7 @@ final class FrameDataBinaryEncoder {
         
         while(binary.count >= 4) {
             let nibble: String = String(binary.prefix(4))
-            let startSubString = binary.index(binary.startIndex, offsetBy: 4)
+            let startSubString: String.Index = binary.index(binary.startIndex, offsetBy: 4)
             binary = String(binary[startSubString...])
             nibbles.append(nibble)
         }
