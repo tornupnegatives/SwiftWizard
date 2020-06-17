@@ -19,12 +19,17 @@ final class BitHelpers {
         return Int(binary, radix: 2) ?? 0
     }
     
-    // Converts passed byte string to an Int
+    // Converts passed byte string to an Int, assuming any alphabetic characters represent hex numbers
     static func byteToValue(byte: String) throws -> Int {
-        guard let newByte = Int(byte) else {
-            throw BitHelpersError.illegalByte("Invalid byte \'\(byte)\'")
+        // Check if byte is an String Integer
+        guard let intValue = Int(byte) else {
+            // Check if byte is hex
+            guard let asciiValue: Int = Character("\(byte)").hexDigitValue else {
+                throw BitHelpersError.illegalByte("Invalid byte \'\(byte)\'")
+            }
+            return Int(asciiValue)
         }
-        return newByte
+        return intValue
     }
     
     private static func leftZeroPad(binary: String, nBits: Int) -> String {
