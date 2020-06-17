@@ -92,9 +92,9 @@ iOSInjectionProject/
 # Custom
 #
 # Below are some files that are not ready to be hosted online. They are ugly...
+
 SwiftWizardUITests/
 Products/
-
 SwiftWizard.xcodeproj
 SwiftWizard/Controller/
 SwiftWizard/Supporting Files/
