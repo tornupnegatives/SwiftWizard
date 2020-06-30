@@ -25,13 +25,7 @@ final class HexByteBinaryEncoder {
     }
     
     private static func binaryForByte(byte: String) -> String {
-        var value: Int
-        
-        do {
-            value = try BitHelpers.byteToValue(byte: byte)
-        } catch BitHelpersError.illegalByte(byte) {
-            return "0000"
-        } catch {
+        guard let value: Int = BitHelpers.byteToValue(byte: byte) else {
             return "0000"
         }
         return BitHelpers.valueToBinary(value: value, nBits: 4)
