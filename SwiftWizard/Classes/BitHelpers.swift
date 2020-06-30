@@ -2,11 +2,6 @@
 
 import Foundation
 
-// MARK: BitHelpersError
-enum BitHelpersError: Error {
-    case illegalByte(String)
-}
-
 final class BitHelpers {
     // Converts passed Int to its binary representation
     static func valueToBinary(value: Int, nBits: Int) -> String {
@@ -20,12 +15,12 @@ final class BitHelpers {
     }
     
     // Converts passed byte string to an Int, assuming any alphabetic characters represent hex numbers
-    static func byteToValue(byte: String) throws -> Int {
+    static func byteToValue(byte: String) -> Int? {
         // Check if byte is an String Integer
         guard let intValue = Int(byte) else {
             // Check if byte is hex
             guard let asciiValue: Int = Character("\(byte)").hexDigitValue else {
-                throw BitHelpersError.illegalByte("Invalid byte \'\(byte)\'")
+                return nil
             }
             return Int(asciiValue)
         }
