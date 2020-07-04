@@ -25,7 +25,7 @@ enum CodingTableError: Error {
 }
 
 class CodingTable {
-    static let bits:                [Int]  =    [4, 1, 6, 5, 5, 4, 4, 4, 4, 4, 3, 3, 3]
+    static var bits:                [Int]  =    [4, 1, 6, 5, 5, 4, 4, 4, 4, 4, 3, 3, 3]
     
     static let parameters:          [String] =  ["gain", "repeat", "pitch", "k1", "k2", "k3", "k4", "k5", "k6", "k7", "k8",
                                                  "k9", "k10"]
