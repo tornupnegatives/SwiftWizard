@@ -2,8 +2,9 @@
 
 import Foundation
 
+extension Dictionary where Value == Double, Key == String {
+
 final class BitPacker {
-    private static let kFrameDataParametersMethodName: String = "parameters"
     private static let kByteStreamDelimiter: String = ","
     
     static var delimiter: String {
@@ -24,12 +25,28 @@ final class BitPacker {
         }
     }
     
-    static func pack(frameData: [String]) -> String {
-        let parameterList:  [String: Int]       = getKeyIndexPairs(key: kFrameDataParametersMethodName, source: frameData)
-        let binary:         [String]            = FrameDataBinaryEncoder.process(parameterList: [parameterList])
+    static func pack(frameData: [FrameData]) -> String {
+        var parameterListWithInt: [[String: Int]] = []
+        var keys: [String]
+        var intValues: [Int]
+        for frame in frameData {
+            let dict: [String: Double] = frame.getParameters()
+            
+            keys = Array(dict.keys)
+            let values: Dictionary.Values = dict.values
+            
+            intValues = []
+            for value in values {
+                intValues.append(Int(value))
+            }
+            parameterListWithInt.append(Dictionary(uniqueKeysWithValues: zip(keys, intValues)))
+        }
+        
+        
+        let binary:         [String]            = FrameDataBinaryEncoder.process(parameterList: parameterListWithInt)
         let hex:            [String]            = HexConverter.process(nibbles: binary)
         let reversed:       [String]            = NibbleBitReverser.process(nibbles: hex)
-        let switched:       [String]            = NibbleBitReverser.process(nibbles: reversed)
+        let switched:       [String]            = NibbleSwitcher.process(nibbles: reversed)
         let output:         [String]            = HexFormatter.process(nibbles: switched)
         
         return output.joined(separator: kByteStreamDelimiter)
@@ -89,7 +106,7 @@ final class BitPacker {
         }
         return keyIndexPairs
     }
-
+    
     private static func parametersAreSilenceAndComplete(parameters: [String: Double]) -> Bool {
         return parameters[kParameterGain] == 0
     }
