@@ -2,8 +2,6 @@
 
 import Foundation
 
-extension Dictionary where Value == Double, Key == String {
-
 final class BitPacker {
     private static let kByteStreamDelimiter: String = ","
     
