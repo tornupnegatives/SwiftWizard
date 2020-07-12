@@ -7,6 +7,8 @@ final class FrameDataBinaryEncoder {
     
     // Iterate through array of parameter dictionaries to get binary value for each element
     static func process(parameterList: [[String: Int]]) -> [String] {
+        binary = ""
+        
         for parameterPair in parameterList {
             for CTParameter in CodingTable.parameters {
                 let index = CodingTable.parameters.firstIndex(of: CTParameter)! // top-level for-in guarantees it exists, safe to unwrap
