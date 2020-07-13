@@ -66,7 +66,7 @@ final class FrameData {
             self.pitch        = Double(pitch)
         } else {
             let startSubString: String.Index = parameter.index(parameter.startIndex, offsetBy: 1)
-            let bin:   Int    = Int(parameter[startSubString...]) ?? 0
+            let bin:   Int    = Int(parameter[startSubString...])!
             let index: Int    = Int(value)
             let k:     Double = try! CodingTable.kBinFor(k: bin)[index] // TODO: Handle exception
             
