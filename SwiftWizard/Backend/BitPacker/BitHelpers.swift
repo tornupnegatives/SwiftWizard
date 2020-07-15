@@ -11,7 +11,7 @@ final class BitHelpers {
     
     // Converts passed binary string to an Int
     static func binaryToValue(binary: String) -> Int {
-        return Int(binary, radix: 2) ?? 0
+        return Int(binary, radix: 2)!
     }
     
     // Converts passed byte string to an Int, assuming any alphabetic characters represent hex numbers
