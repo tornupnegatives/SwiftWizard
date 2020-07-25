@@ -113,7 +113,6 @@ final class BitPacker {
     }
     
     // MARK: Helper Methods
-    
     private static var unvoicedKeys: [String] {
         get {
             return [kParameterGain, kParameterRepeat, kParameterPitch, kParameterK1, kParameterK2, kParameterK3, kParameterK4]

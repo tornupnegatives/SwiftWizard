@@ -1,4 +1,4 @@
-// The HexByteBinaryEncoder parses hex bitstreams into a binary format acceptable to the TMS5220
+// The HexByteBinaryEncoder parses hex bitstreams into a 4-bit binary format acceptable to the TMS5220
 
 import Foundation
 
@@ -25,9 +25,7 @@ final class HexByteBinaryEncoder {
     }
     
     private static func binaryForByte(byte: String) -> String {
-        guard let value: Int = BitHelpers.byteToValue(byte: byte) else {
-            return "0000"
-        }
+        let value: Int = BitHelpers.byteToValue(byte: byte)
         return BitHelpers.valueToBinary(value: value, nBits: 4)
     }
 }

@@ -2,6 +2,7 @@
 
 import Foundation
 
+/// 
 final class FrameDataBinaryEncoder {
     private static var binary: String = ""
     

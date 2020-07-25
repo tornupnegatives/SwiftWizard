@@ -9,7 +9,7 @@
 import XCTest
 
 class FrameDataTests: XCTestCase {
-    var subject:   FrameData!
+    var subject:   Frame!
     var reflector: Reflector!
 
     override func setUpWithError() throws {}
@@ -20,7 +20,7 @@ class FrameDataTests: XCTestCase {
         let ks: [Double] = [0.0, 0.0]
         reflector = Reflector(ks: ks, rms: 32, limitRMS: false)
         
-        subject = FrameData(reflector: reflector, pitch: 32, repeats: false)
+        subject = Frame(reflector: reflector, pitch: 32, repeats: false)
         let parameterKeys: [String] = Array(subject.getParameters().keys)
 
         XCTAssertTrue(parameterKeys.contains(kParameterGain))
@@ -43,7 +43,7 @@ class FrameDataTests: XCTestCase {
         let ks: [Double] = [0.1, 5.0]
         reflector = Reflector(ks: ks, rms: 32, limitRMS: false)
         
-        subject = FrameData(reflector: reflector, pitch: 32, repeats: false)
+        subject = Frame(reflector: reflector, pitch: 32, repeats: false)
         let parameterKeys: [String] = Array(subject.getParameters().keys)
         
         XCTAssertTrue(parameterKeys.contains(kParameterGain))
@@ -65,7 +65,7 @@ class FrameDataTests: XCTestCase {
         let ks: [Double] = [0.1, 0.1]
         reflector = Reflector(ks: ks, rms: 32, limitRMS: false)
         
-        subject = FrameData(reflector: reflector, pitch: 0, repeats: false)
+        subject = Frame(reflector: reflector, pitch: 0, repeats: false)
         let parameterKeys: [String] = Array(subject.getParameters().keys)
         
         XCTAssertTrue(parameterKeys.contains(kParameterGain))
@@ -87,7 +87,7 @@ class FrameDataTests: XCTestCase {
         let ks: [Double] = [0.0, 0.0]
         reflector = Reflector(ks: ks, rms: 0, limitRMS: false)
         
-        subject = FrameData(reflector: reflector, pitch: 0, repeats: false)
+        subject = Frame(reflector: reflector, pitch: 0, repeats: false)
         let parameterKeys: [String] = Array(subject.getParameters().keys)
         
         XCTAssertTrue(parameterKeys.contains(kParameterGain))
@@ -109,7 +109,7 @@ class FrameDataTests: XCTestCase {
         let ks: [Double] = [0.0, 0.0]
         reflector = Reflector(ks: ks, rms: 32, limitRMS: false)
         
-        subject = FrameData(reflector: reflector, pitch: 32, repeats: true)
+        subject = Frame(reflector: reflector, pitch: 32, repeats: true)
         let parameterKeys: [String] = Array(subject.getParameters().keys)
         
         XCTAssertTrue(parameterKeys.contains(kParameterGain))
@@ -131,7 +131,7 @@ class FrameDataTests: XCTestCase {
         let ks: [Double] = [0.0, 0.0]
         reflector = Reflector(ks: ks, rms: 32, limitRMS: false)
         
-        subject = FrameData(reflector: reflector, pitch: 32, repeats: true)
+        subject = Frame(reflector: reflector, pitch: 32, repeats: true)
         
         XCTAssertFalse(subject.getParameters()[kParameterGain] == 52.0)
     }

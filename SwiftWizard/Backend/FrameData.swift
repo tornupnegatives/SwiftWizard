@@ -1,8 +1,9 @@
-// The FrameData class creates a dictionary with pairs of KParameters and their values
-// The number of parameters in a frame will depend on what sound that frame describes
-
 import Foundation
 
+/// Holds a KParameter and its value
+///
+/// The KParameter represents a part of a sample to be applied through a certain coefficient of the LPC filter
+/// Unvoiced frames will contain 7 KParameters
 final class FrameData {
     var reflector: Reflector
     

@@ -15,6 +15,7 @@ class FrameDataBinaryEncoderTests: XCTestCase {
 
     override func setUpWithError() throws {
         frameData = [[String: Int]]()
+        
         frameData.append(contentsOf: [[kParameterGain: 9],  [kParameterRepeat: 0],
                                       [kParameterPitch: 0], [kParameterK1: 21],
                                       [kParameterK2: 22],   [kParameterK3: 6],
@@ -47,19 +48,15 @@ class FrameDataBinaryEncoderTests: XCTestCase {
         
         frameData.append(contentsOf: [[kParameterGain: 0]])
         
+        CodingTable.bits[2] = 5
+        
         subject = FrameDataBinaryEncoder.process(parameterList: frameData)
-        
-        
-    }
-
-    override func tearDownWithError() throws {
     }
     
-    /* Because of differences regarding mutability between Obj-C and Swift, it is difficult to get this test
-     * to work as originally designed. There is no easy way (as far as I can tell) to set CodingTable.bits[2] = 5
-     * and have its state preserved across all classes. This condition is necessary for the test to pass, so
-     * the value must be temporarily changed manually. One day I will figure it out...
-     */
+    override func tearDownWithError() throws {
+        CodingTable.bits[2] = 6
+    }
+    
     func testConvertsFramesIntoBinaryNibbles() throws {
         let expected: [String] = [ "1001", "0000", "0010", "1011", "0110", "0110", "0110", "0110", "1000", "0001", "1010", "0000",
                                    "1101", "0010", "1010", "0101", "0000", "0101", "0101", "0110", "1011", "1010", "1010", "1101",

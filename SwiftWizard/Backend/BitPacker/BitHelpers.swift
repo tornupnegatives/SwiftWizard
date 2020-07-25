@@ -1,7 +1,7 @@
 import Foundation
 
 /// Methods for converting between binary, hex, and integers
-final class BitHelpers {
+struct BitHelpers {
     static func valueToBinary(value: Int, nBits: Int) -> String {
         let binary: String = String(value, radix: 2)
         return leftZeroPad(binary: binary, nBits: nBits)
