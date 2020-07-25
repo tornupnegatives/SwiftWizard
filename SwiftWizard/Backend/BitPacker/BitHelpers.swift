@@ -1,30 +1,19 @@
-// BitHelpers provides some static methods for working with binary strings
-
 import Foundation
 
+/// Methods for converting between binary, hex, and integers
 final class BitHelpers {
-    // Converts passed Int to its binary representation
     static func valueToBinary(value: Int, nBits: Int) -> String {
         let binary: String = String(value, radix: 2)
         return leftZeroPad(binary: binary, nBits: nBits)
     }
     
-    // Converts passed binary string to an Int
     static func binaryToValue(binary: String) -> Int {
         return Int(binary, radix: 2)!
     }
     
-    // Converts passed byte string to an Int, assuming any alphabetic characters represent hex numbers
-    static func byteToValue(byte: String) -> Int? {
-        // Check if byte is an String Integer
-        guard let intValue = Int(byte) else {
-            // Check if byte is hex
-            guard let asciiValue: Int = Character("\(byte)").hexDigitValue else {
-                return nil
-            }
-            return Int(asciiValue)
-        }
-        return intValue
+    static func byteToValue(byte: String) -> Int {
+        let parsed: UInt = strtoul(byte, nil, 16)   // sscanf(byte, "%x", &parsed)
+        return Int(parsed)
     }
     
     private static func leftZeroPad(binary: String, nBits: Int) -> String {
