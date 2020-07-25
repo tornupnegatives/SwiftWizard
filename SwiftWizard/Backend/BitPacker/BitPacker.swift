@@ -1,14 +1,8 @@
-// The BitPacker parses FrameData into a hex bitsream
-// During packing, it first reads in that binary values of passed KParameters
-// These values convereted to hex (with an optional "0x" prefix for the Arudino
-// These hex nibbles are reversed, switched, and grouped into a format accetable to the TMS5220
-
 import Foundation
 
-// Used to quickly convert the Double parameters to Int
-extension Dictionary where Value == Double, Key == String {
-    /// Given [String: Double], creates  [String: Int]
-    func doubleValuesToInt() -> [String: Int] {
+private extension Dictionary where Value == Double, Key == String {
+    /// Quickly casts all Double values of Integer type
+    func castDoubleToInt() -> [String: Int] {
         let keys: [String] = Array(self.keys)
         
         var intValues: [Int] = []
@@ -16,22 +10,27 @@ extension Dictionary where Value == Double, Key == String {
             intValues.append(Int(value))
         }
         
-        var newDictionary: [String: Int] = [:]
+        var new: [String: Int] = [:]
         var idx: Int = 0
         
         while idx < keys.count {
             let key: String = keys[idx]
             let value: Int = intValues[idx]
             
-            newDictionary[key] = value
+            new[key] = value
             
             idx += 1
         }
         
-        return newDictionary
+        return new
     }
 }
 
+/// Parses FrameData into a hex bitsream
+///
+/// During packing, it first reads in that binary values of passed KParameters
+/// These values convereted to hex (with an optional "0x" prefix for the Arudino
+/// These hex nibbles are reversed, switched, and grouped into a format accetable to the TMS5220
 final class BitPacker {
     private static let kByteStreamDelimiter: String = ","
     
@@ -41,25 +40,13 @@ final class BitPacker {
         }
     }
     
-    private static var unvoicedKeys: [String] {
-        get {
-            return [kParameterGain, kParameterRepeat, kParameterPitch, kParameterK1, kParameterK2, kParameterK3, kParameterK4]
-        }
-    }
-    
-    private static var repeatKeys: [String] {
-        get {
-            return [kParameterGain, kParameterRepeat, kParameterPitch]
-        }
-    }
-    
     static func pack(frameData: [FrameData]) -> String {
         var parameterListWithInt: [[String: Int]] = []
 
         for frame in frameData {
             let dict: [String: Double] = frame.getParameters()
             
-            parameterListWithInt.append(dict.doubleValuesToInt())
+            parameterListWithInt.append(dict.castDoubleToInt())
         }
         
         
@@ -86,36 +73,37 @@ final class BitPacker {
         var binaryString: String? = binary
         
         while binaryString != nil {
-            let frameKeys: [String] = []
+            var frameKeys: [String] = []
             let frame: FrameData = FrameData.frameForDecoding()
             
             for parameter: String in CodingTable.parameters {
                 let index: Int = CodingTable.parameters.firstIndex(of: parameter)! // Exists
-                
                 let parameterBits: Int = CodingTable.bits[index]
+                
                 guard let length: Int = binaryString?.count else {
+                    break
+                }
+                
+                if parameterBits > length {
+                    binaryString = nil
                     break
                 }
                 
                 let shift: Int = (length < parameterBits) ? (parameterBits - length) : 0
                 
                 var substringIndex: String.Index = binaryString!.index(binaryString!.startIndex, offsetBy: parameterBits - shift)
-                let value: Int = BitHelpers.binaryToValue(binary: String(binaryString!.prefix(upTo: substringIndex)))
+                let value: Int = BitHelpers.binaryToValue(binary: String(binaryString!.prefix(upTo: substringIndex))) << shift
 
-                if parameterBits > length {
-                    binaryString = nil
-                    break
-                }
                 substringIndex = binaryString!.index(binaryString!.startIndex, offsetBy: parameterBits)
                 binaryString = String(binaryString!.suffix(from: substringIndex))
                 
                 frame.setParameter(parameter: parameter, value: Double(value))
-                frames.append(frame)
+                frameKeys.append(parameter)
                 
                 let parameters: [String: Double] = frame.getParameters()
                 if parametersAreSilenceAndComplete(parameters: parameters) || parametersAreStopAndComplete(parameters: parameters) ||
                    parametersAreUnvoicedAndComplete(parameters: parameters, frameKeys: frameKeys) ||
-                    parametersAreRepeatedAndComplete(parameters: parameters, frameKeys: frameKeys) || binaryString == nil {
+                    parametersAreRepeatedAndComplete(parameters: parameters, frameKeys: frameKeys) {
                     break
                 }
             }
@@ -123,16 +111,30 @@ final class BitPacker {
         }
         return frames
     }
+    
+    // MARK: Helper Methods
+    
+    private static var unvoicedKeys: [String] {
+        get {
+            return [kParameterGain, kParameterRepeat, kParameterPitch, kParameterK1, kParameterK2, kParameterK3, kParameterK4]
+        }
+    }
+    
+    private static var repeatKeys: [String] {
+        get {
+            return [kParameterGain, kParameterRepeat, kParameterPitch]
+        }
+    }
 
-    private static func getKeyIndexPairs(key: String, source: [String]) -> [String: Int] {
-        var keyIndexPairs: [String: Int] = [String: Int]()
+    private static func getKeyIndexes(key: String, source: [String]) -> [String: Int] {
+        var keyIndexes: [String: Int] = [String: Int]()
         for index in source.indices {
             let element: String = source[index]
             if element == key {
-                keyIndexPairs[element] = index
+                keyIndexes[element] = index
             }
         }
-        return keyIndexPairs
+        return keyIndexes
     }
     
     private static func parametersAreSilenceAndComplete(parameters: [String: Double]) -> Bool {
@@ -157,7 +159,6 @@ final class BitPacker {
                 return false
             }
         }
-        
         return true
     }
     
